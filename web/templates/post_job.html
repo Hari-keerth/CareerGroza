@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerGrowza | Post a New Job</title>
+    
+    <link rel="icon" type="image/png" sizes="128x128" href="{% static 'images/favicon/CareerGrowza_Favicon.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}">
+
+    <!-- Boxicons -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    
+    <!-- Base App Styles -->
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    
+    <!-- Page Specific CSS -->
+    <link rel="stylesheet" href="{% static 'css/post_job.css' %}?v=1">
+</head>
+
+<body>
+
+{% include "recruiter_sidebar.html" with active_page="post_job" %}
+
+<main class="main-content">
+
+    <div class="post-job-container">
+
+        <!-- Top Header Card -->
+        <div class="post-job-header">
+            <div class="header-text">
+                <h2><i class='bx bx-plus-circle'></i> Post a New Job Opportunity</h2>
+                <p>Fill in the details below to publish your open position to job seekers.</p>
+            </div>
+            <a href="{% url 'recruiter_dashboard' %}" class="btn-secondary-link">
+                <i class='bx bx-arrow-back'></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Form Card Shell -->
+        <div class="dash-card form-card">
+            <form method="POST" action="{% url 'post_job' %}" class="job-form">
+                {% csrf_token %}
+
+                <!-- Section: Key Details -->
+                <div class="form-section-title">
+                    <i class='bx bx-briefcase'></i> Key Role Details
+                </div>
+
+                <div class="form-grid-2">
+                    <!-- Job Title -->
+                    <div class="form-group">
+                        <label for="title">Job Title <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class='bx bx-user-voice'></i>
+                            <input type="text" id="title" name="title" placeholder="e.g. Senior Python Developer" required>
+                        </div>
+                    </div>
+
+                    <!-- Company Name -->
+                    <div class="form-group">
+                        <label for="company_name">Company Name <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class='bx bx-building-house'></i>
+                            <input type="text" id="company_name" name="company_name" placeholder="e.g. Growza Tech Solutions" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-grid-3">
+                    <!-- Location -->
+                    <div class="form-group">
+                        <label for="location">Location <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class='bx bx-map-pin'></i>
+                            <input type="text" id="location" name="location" placeholder="e.g. Kochi, Kerala (Hybrid)" required>
+                        </div>
+                    </div>
+
+                    <!-- Salary -->
+                    <div class="form-group">
+                        <label for="salary">Salary Range <span class="optional">(Optional)</span></label>
+                        <div class="input-with-icon">
+                            <i class='bx bx-rupee'></i>
+                            <input type="text" id="salary" name="salary" placeholder="e.g. ₹8,00,000 - ₹12,00,000 PA">
+                        </div>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="form-group">
+                        <label for="experience_required">Experience Required <span class="optional">(Optional)</span></label>
+                        <div class="input-with-icon">
+                            <i class='bx bx-time-five'></i>
+                            <input type="text" id="experience_required" name="experience_required" placeholder="e.g. 3-5 Years">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Application & Requirements -->
+                <div class="form-section-title mt-24">
+                    <i class='bx bx-list-check'></i> Requirements & Link
+                </div>
+
+                <!-- External URL -->
+                <div class="form-group">
+                    <label for="redirect_url">External Application Link <span class="optional">(Optional)</span></label>
+                    <div class="input-with-icon">
+                        <i class='bx bx-link-external'></i>
+                        <input type="url" id="redirect_url" name="redirect_url" placeholder="https://company.com/careers/apply">
+                    </div>
+                    <small class="help-text">Direct applicants to your external company page instead of in-app submission.</small>
+                </div>
+
+                <!-- Required Skills -->
+                <div class="form-group">
+                    <label for="required_skills">Required Skills <span class="required">*</span></label>
+                    <div class="input-with-icon">
+                        <i class='bx bx-code-alt'></i>
+                        <input type="text" id="required_skills" name="required_skills" placeholder="e.g. Python, Django, PostgreSQL, Git" required>
+                    </div>
+                    <small class="help-text">Separate individual technical skills with commas.</small>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Detailed Job Description <span class="required">*</span></label>
+                    <textarea id="description" name="description" rows="6" placeholder="Describe the key responsibilities, qualifications, and benefits..." required></textarea>
+                </div>
+
+                <!-- Form Action Footer -->
+                <div class="form-actions">
+                    <a href="{% url 'recruiter_dashboard' %}" class="btn-cancel">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn-submit">
+                        <i class='bx bx-paper-plane'></i> Publish Job Post
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+</main>
+
+<script src="{% static 'js/sidebar.js' %}"></script>
+<script src="{% static 'js/theme.js' %}"></script>
+
+</body>
+</html>

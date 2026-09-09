@@ -1,0 +1,274 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareerGrowza | Profile</title>
+    <link rel="icon" type="image/png" sizes="128x128" href="{% static 'images/favicon/CareerGrowza_Favicon.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}">
+
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}?v=7">
+</head>
+
+<body>
+
+{% include "navbar.html" with active_page="profile" %}
+
+<main class="main-content">
+
+    <!-- Main Grid Shell -->
+    <div class="dashboard-grid">
+
+        <!-- ================= LEFT COLUMN ================= -->
+        <div class="grid-col-left">
+
+            <!-- MAIN TOP BANNER -->
+            <div class="profile-banner-header">
+                <div class="banner-user-info">
+                    <div class="profile-avatar-container">
+                        {% if profile.profile_picture %}
+                            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" id="current-profile-img">
+                        {% else %}
+                            <div class="profile-avatar-fallback">
+                                <i class='bx bx-user'></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="profile-user-text">
+                        <h2>{% if profile.first_name %}{{ profile.first_name }} {{ profile.last_name }}{% else %}{{ profile.user }}{% endif %}</h2>
+                        {% if profile.headline %}
+                            <p class="profile-headline">{{ profile.headline }}</p>
+                        {% else %}
+                            <p class="profile-email">{{ profile.email }}</p>
+                        {% endif %}
+                        <span class="badge-active-banner">Active Member</span>
+                    </div>
+                </div>
+
+                <a href="{% url 'edit_profile' %}" class="banner-edit-btn">
+                    <i class='bx bx-edit'></i> Edit Profile
+                </a>
+            </div>
+
+            <!-- Side-by-Side: Personal Info (Left) & Location (Right) -->
+            <div class="sub-grid-2col">
+
+                <!-- Personal Information -->
+                <div class="dash-card">
+                    <div class="card-title">
+                        <i class='bx bx-id-card'></i>
+                        <h3>Personal Information</h3>
+                    </div>
+                    <div class="info-split-row">
+                        <div class="info-block labels">
+                            <span class="label">Username</span>
+                            <span class="label">Age</span>
+                            <span class="label">Phone</span>
+                            <span class="label">Member Since</span>
+                        </div>
+                        <div class="info-block values">
+                            <span class="value">{{ profile.user }}</span>
+                            <span class="value">{{ profile.age|default:"--" }}</span>
+                            <span class="value">{{ profile.phone|default:"Not specified" }}</span>
+                            <span class="value">{{ profile.creation_date|date:"d M Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="dash-card">
+                    <div class="card-title">
+                        <i class='bx bx-map-pin'></i>
+                        <h3>Location</h3>
+                    </div>
+                    <div class="info-split-row">
+                        <div class="info-block labels">
+                            <span class="label">Country</span>
+                            <span class="label">City</span>
+                            <span class="label">Address</span>
+                        </div>
+                        <div class="info-block values">
+                            <span class="value">{{ profile.country|default:"--" }}</span>
+                            <span class="value">{{ profile.city|default:"--" }}</span>
+                            <span class="value">{{ profile.address|default:"--" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Professional Details Section -->
+            <div class="dash-card">
+                <div class="card-title">
+                    <i class='bx bx-briefcase'></i>
+                    <h3>Professional Details</h3>
+                </div>
+                <div class="info-split-row">
+                    <div class="info-block labels">
+                        <span class="label">Education</span>
+                        <span class="label">Experience Level</span>
+                        {% if profile.experience_level != "fresher" and profile.years_of_experience %}
+                            <span class="label">Years of Experience</span>
+                        {% endif %}
+                    </div>
+                    <div class="info-block values">
+                        <span class="value">{{ profile.education|default:"Not specified" }}</span>
+                        <span class="value">{{ profile.experience_level|capfirst|default:"Fresher" }}</span>
+                        {% if profile.experience_level != "fresher" and profile.years_of_experience %}
+                            <span class="value">{{ profile.years_of_experience }} Year(s)</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- About / Bio Section -->
+            {% if profile.bio %}
+            <div class="dash-card">
+                <div class="card-title">
+                    <i class='bx bx-detail'></i>
+                    <h3>About / Summary</h3>
+                </div>
+                <p class="profile-bio-text">{{ profile.bio }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Skills & Expertise -->
+            <div class="dash-card">
+                <div class="card-title-between">
+                    <div class="card-title">
+                        <i class='bx bx-code-alt'></i>
+                        <h3>Skills & Expertise</h3>
+                    </div>
+                    <a href="{% url 'edit_skills' %}" class="link-btn">
+                        <i class='bx bx-edit'></i> Edit Skills
+                    </a>
+                </div>
+
+                {% if skills %}
+                <div class="skills-categorized-grid">
+
+                    <!-- Technical Skills -->
+                    <div class="skill-category-box">
+                        <span class="cat-title"><i class='bx bx-chip'></i> Technical Skills</span>
+                        <div class="skill-tags">
+                            {% for skill in skills.technical_skills %}
+                                <span class="skill-pill">{{ skill }}</span>
+                            {% empty %}
+                                <span class="no-skill">None</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Frameworks -->
+                    <div class="skill-category-box">
+                        <span class="cat-title"><i class='bx bx-layer'></i> Frameworks</span>
+                        <div class="skill-tags">
+                            {% for skill in skills.frameworks %}
+                                <span class="skill-pill light">{{ skill }}</span>
+                            {% empty %}
+                                <span class="no-skill">None</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Tools -->
+                    <div class="skill-category-box">
+                        <span class="cat-title"><i class='bx bx-wrench'></i> Tools</span>
+                        <div class="skill-tags">
+                            {% for skill in skills.tools %}
+                                <span class="skill-pill border">{{ skill }}</span>
+                            {% empty %}
+                                <span class="no-skill">None</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Databases -->
+                    <div class="skill-category-box">
+                        <span class="cat-title"><i class='bx bx-data'></i> Databases</span>
+                        <div class="skill-tags">
+                            {% for skill in skills.databases %}
+                                <span class="skill-pill border">{{ skill }}</span>
+                            {% empty %}
+                                <span class="no-skill">None</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Cloud -->
+                    <div class="skill-category-box">
+                        <span class="cat-title"><i class='bx bx-cloud'></i> Cloud</span>
+                        <div class="skill-tags">
+                            {% for skill in skills.cloud_skills %}
+                                <span class="skill-pill light">{{ skill }}</span>
+                            {% empty %}
+                                <span class="no-skill">None</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Soft Skills -->
+                    <div class="skill-category-box">
+                        <span class="cat-title"><i class='bx bx-group'></i> Soft Skills</span>
+                        <div class="skill-tags">
+                            {% for skill in skills.soft_skills %}
+                                <span class="skill-pill gray">{{ skill }}</span>
+                            {% empty %}
+                                <span class="no-skill">None</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+                {% else %}
+                <p class="no-data">Upload your resume to automatically extract and populate skills.</p>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- ================= RIGHT COLUMN ================= -->
+        <div class="grid-col-right">
+
+            <!-- Resume Skills Card -->
+            <div class="dash-card">
+                <div class="card-title">
+                    <i class='bx bx-file'></i>
+                    <h3>Resume Skills</h3>
+                </div>
+                <p class="resume-subtext">Upload your latest resume (PDF) to auto-extract skills.</p>
+
+                <form method="POST" enctype="multipart/form-data" action="{% url 'extract_skills' %}" class="resume-form-compact">
+                    {% csrf_token %}
+                    <input type="file" id="resume" name="resume" accept=".pdf" hidden required>
+                    
+                    <label for="resume" class="dropzone-label">
+                        <i class='bx bx-cloud-upload'></i>
+                        <span id="file-name">Choose PDF File</span>
+                    </label>
+
+                    <button type="submit" class="btn-extract-full">
+                        <i class='bx bx-upload'></i> Extract Skills
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="{% static 'js/sidebar.js' %}"></script>
+<script src="{% static 'js/profile.js' %}"></script>
+<script src="{% static 'js/theme.js' %}"></script>
+
+</body>
+</html>
